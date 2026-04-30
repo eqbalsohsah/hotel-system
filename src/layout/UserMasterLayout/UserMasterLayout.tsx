@@ -1,3 +1,10 @@
+import { Outlet } from "react-router-dom";
+
 export default function UserMasterLayout() {
-  return <div>UserMasterLayout</div>;
+  return (
+    <div>
+      UserMasterLayout
+      <Outlet />
+    </div>
+  );
 }
