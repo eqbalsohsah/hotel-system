@@ -21,6 +21,7 @@ import Ads from "../features/Admin/Ads/Ads";
 import AddNewAd from "../features/Admin/Ads/AddNewAd/AddNewAd";
 import Facilities from "../features/Admin/Facilities/Facilities";
 import Bookings from "../features/Admin/Bookings/Bookings";
+import ProtectedRoute from "../common/components/ProtectedRoute";
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -29,10 +30,15 @@ export const routes = createBrowserRouter([
     children: [
       { index: true, element: <UserHome /> },
       { path: "home", element: <UserHome /> },
-      { path: "explore", element: <ExplorePage /> },
+     {element:<ProtectedRoute/>,
+      children:[
+       { path: "explore", element: <ExplorePage /> },
       { path: "fav", element: <FavouritesPage /> },
       { path: "booking-details/:bookingId", element: <BookingDetails /> },
       { path: "profile", element: <Profile /> },
+      ]
+
+     }
     ],
   },
   {
@@ -50,7 +56,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <MasterLayout />,
+    element: <ProtectedRoute><MasterLayout/></ProtectedRoute>,
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Navigate to="home" replace /> },

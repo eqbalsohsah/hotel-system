@@ -1,3 +1,9 @@
+
+
 export default function ChangePass() {
-  return <div>ChangePass</div>;
+  return (
+    <div>
+      changepass
+    </div>
+  )
 }
