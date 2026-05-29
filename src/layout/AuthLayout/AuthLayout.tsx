@@ -30,25 +30,40 @@ export default function AuthLayout() {
 
   return (
     <>
-      <Grid container  spacing={5} sx={{minHeight: "100vh"
-     ,}}  >
+    <Box sx={{position: "absolute",
+      top: "20px",
+      left: "20px",
+
+
+      zIndex: 1000,}}>
+
+
+    <img src={logo} alt="logo" width="120px" />
+
+
+</Box>
+      <Grid container
+ sx={{
+
+
+       flexDirection: {
+    xs: "column-reverse",
+    md: "row",
+  },
+
+     }}  >
 
         <Grid
           size={{ xs: 12, md: 6 }}
           sx={{
             display: "flex",
             justifyContent: "center",
-alignItems:"center",
-
-
+mt:4,
 
           }}
         >
-<Box sx={{position:"absolute",top:20,left:20}}>
-  <img src={logo} alt="logo"  width="120px"/>
 
-</Box>
-         <Box sx={{width:"75%",height:"80%"}} >
+         <Box sx={{width:"75%"}} >
            <Outlet />
          </Box>
         </Grid>
@@ -57,19 +72,32 @@ alignItems:"center",
   sx={{
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    pt:3,
+    mt:5
 
-    p: 4,
+
+
+
+
+
+
+
+
   }}
 >
   <Box
     component="img"
     src={image}
     sx={{
+      display:"block",
+      xs:{
+        mt:5,
+      },
 
 width:{
-  md:"450px",
-  xs:"350px",
+
+  xs: "300px",
+  md: "420px",
 },
 
   height:"auto",
@@ -93,6 +121,7 @@ width:{
     }}
   />
 </Grid>
+
       </Grid>
     </>
   );

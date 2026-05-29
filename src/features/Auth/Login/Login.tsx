@@ -7,21 +7,24 @@ import {  toast } from 'react-toastify';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { setLogin } from "../../../redux/slices/authSlice";
-import { useAppDispatch } from "../../../redux/store/hook";
+import { useAppDispatch} from "../../../redux/store/hook";
 
 import HeaderAuth from "../../../common/components/HeaderAuth";
+
 
 export default function Login() {
 const { register, handleSubmit,formState:{errors} } = useForm<Ilogin>();
 //state for togglePassword
   const [showPassword, setShowPassword] = useState(false);
   const dispatch=useAppDispatch();
+
 const navigate=useNavigate();
 const onSubmit= async(data:Ilogin)=>{
 try {
 
   const response= await axiosInstance.post<LoginResponse>('/portal/users/login',data);
   console.log(response);
+
   dispatch(
   setLogin({
     user: response.data.data.user,
@@ -29,8 +32,16 @@ try {
     role:response.data.data.user.role,
   })
 );
-  navigate("/home");
-  toast.success(response?.data?.message)
+
+const userRole = response.data.data.user.role;
+if(userRole === "admin"){
+  navigate("/admin/home");
+   toast.success(response?.data?.message)
+}
+else{
+  navigate("/")
+}
+
 
 } catch (error:any) {
  toast.error(error?.response?.data?.message);
@@ -49,7 +60,10 @@ try {
       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
       message: "Invalid email format",
     },
-    })}
+  }
+
+
+    )}
     error={!!errors?.email}
     helperText={errors?.email?.message}
 />
@@ -79,8 +93,10 @@ try {
         required:"password is required"
       })}
     />
-<Link to="/auth/forget-password" style={{textDecoration:"none",float:"right"}}>Forget Password ?</Link>
-<Button  type="submit" variant="contained" fullWidth sx={{my:1,py:1.5,borderRadius:2}}>Login</Button>
+<Box sx={{my:2,textAlign:"right"}}>
+  <Link to="/auth/forget-password" style={{textDecoration:"none",color:"#152C5B",fontSize:"16px"}}>Forget Password ?</Link>
+</Box>
+<Button  type="submit" variant="contained" fullWidth sx={{my:1,py:1.5}}>Login</Button>
 
 </Box>
   </Box>

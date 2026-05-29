@@ -56,7 +56,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <ProtectedRoute><MasterLayout/></ProtectedRoute>,
+    element: <ProtectedRoute allowedRoles={['admin']}><MasterLayout/></ProtectedRoute>,
     errorElement: <NotFound />,
     children: [
       { index: true, element: <Navigate to="home" replace /> },

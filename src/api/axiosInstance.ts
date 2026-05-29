@@ -8,4 +8,16 @@ axiosInstance.interceptors.request.use((config)=>{
         config.headers.Authorization=token
     }
     return config
-})
+});
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if(error.response?.status === 401){
+            localStorage.clear();
+            window.location.href='/auth/login'
+        }
+
+        return Promise.reject(error);
+    }
+
+)

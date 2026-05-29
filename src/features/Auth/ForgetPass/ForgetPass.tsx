@@ -39,7 +39,7 @@ toast.error(error?.response?.data?.message || "something went wrong")
 
   />
 
-  <Button  type="submit" variant="contained" fullWidth sx={{my:1,py:1.5,borderRadius:2}}>Send Email</Button>
+  <Button  type="submit" variant="contained" fullWidth sx={{my:1,py:1.5}}>Send Email</Button>
 
   </Box>
     </Box>
