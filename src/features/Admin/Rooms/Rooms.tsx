@@ -1,18 +1,26 @@
-import { AppBar, Box, Button, Chip, Container, IconButton, LinearProgress, Stack, TablePagination, Tooltip, Typography, useTheme } from "@mui/material";
+import { AppBar, Box, Button, Chip, Container, LinearProgress, TablePagination, Typography, useTheme } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import type { IColumn } from "../../../common/components/CustomTable";
 import type { IRoom } from "../../../interfaces/roomsInterface";
 import { AddCircleOutlineOutlined, Delete, Edit, Visibility } from "@mui/icons-material";
 import CustomTable from "../../../common/components/CustomTable";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { FetchRoomsList } from "../../../services/roomsService";
-import ActionMenu, { type IMenuActions, type IProps } from "../../../common/components/ActionMenu";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteRoom, FetchRoomsList } from "../../../services/roomsService";
+import ActionMenu, { type IMenuActions } from "../../../common/components/ActionMenu";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import DeleteConfirmationModal from "../../../common/components/DeleteConfirmationModal";
+
 
 export default function Rooms() {
     const theme=useTheme();
+    const queryClient = useQueryClient();
+    const [open ,setOpen]=useState(false);
+    const [selectedRoom,setSelectedRoom]=useState<IRoom|null>(null);
   const [searchParams,setSearchParams]=useSearchParams();
   const page=parseInt(searchParams.get("page")|| "0");
   const rowsPerPage=parseInt(searchParams.get("size")|| "5");
+  // grt all rooms
     const {data,isLoading,isFetching}=useQuery({
     queryKey:["rooms",page,rowsPerPage],
     queryFn:()=>FetchRoomsList(page+1,rowsPerPage),
@@ -23,6 +31,23 @@ export default function Rooms() {
     totalCount: number;
   } | undefined;
 
+
+  // delete room
+ const { mutate: performDelete } = useMutation({
+  mutationFn: (id: string) => deleteRoom(id),
+  onSuccess: () => {
+    queryClient.invalidateQueries({
+      queryKey: ["rooms"],
+    });
+    toast.success("room deleted");
+    setOpen(false)
+  },
+  onError:(error:any)=>{
+    toast.error(error.response?.data?.message || "error deleting room");
+  }
+});
+
+//open model
 
 const handleChangePage = (
   event: unknown,
@@ -64,14 +89,26 @@ const getAction=(row:IRoom):IMenuActions[]=>[
     label:"Delete",
     icon:<Delete fontSize="small"/>,
     color:theme.palette.error.main,
-    onClick:(id)=>alert("Delete"),
 
+  onClick:()=>handelOpenModal(row),
   }
 
 ]
+// open model
+const handelOpenModal=(room:IRoom)=>{
+  setSelectedRoom(room);
+  setOpen(true);
+
+}
+// handel delete
+
+const handelConfirmDelete=()=>{
+  if(selectedRoom){
+    performDelete(selectedRoom._id)
+  }
 
 
-
+}
   const columns:IColumn[]=[
         {id:"roomNumber",label:"Room Number"},
         {id:"images",label:"Image",render:(row:IRoom)=>(
@@ -156,9 +193,10 @@ Add New Room
         rowsPerPageOptions={[5,10,25]}
       />}
       </Container>
+
 </Box>
 
-
+<DeleteConfirmationModal open={open} title="Delete Modal" onClose={()=>setOpen(false) } onConfirm={handelConfirmDelete}/>
 
   </>;
 }

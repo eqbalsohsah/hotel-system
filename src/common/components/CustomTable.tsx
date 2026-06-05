@@ -30,7 +30,7 @@ export default function CustomTable({columns,data,isloading}:IProps) {
   component={Paper}
   sx={{
     boxShadow:"0px 4px 20px rgba(0,0,0,0.05)",
-    borderRadius:"12px",
+    borderRadius:"8px",
     border:"1px solid #eee"
   }}>
       <Table >

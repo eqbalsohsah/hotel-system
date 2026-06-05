@@ -56,7 +56,7 @@ const handleChangeRowsPerPage = (
     <AppBar position="static" sx={{
       backgroundColor:"#fff",
       color:theme.palette.primary.main,
-
+boxShadow:"none",
       borderBottom:`1px solid ${theme.palette.divider}`,
     }}>
       <Box>
