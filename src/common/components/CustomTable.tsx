@@ -38,7 +38,7 @@ export default function CustomTable({columns,data,isloading}:IProps) {
           <TableRow>
             {columns.map((column)=>
               <TableCell key={column.id}
-              sx={{fontWeight:"bold",color:"#000"}}>
+              sx={{fontWeight:"bold",color:"white"}}>
                 {column.label}
             </TableCell>
 

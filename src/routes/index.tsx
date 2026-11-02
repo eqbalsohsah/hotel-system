@@ -30,9 +30,10 @@ export const routes = createBrowserRouter([
     children: [
       { index: true, element: <UserHome /> },
       { path: "home", element: <UserHome /> },
+     { path: "explore", element: <ExplorePage /> },
      {element:<ProtectedRoute/>,
       children:[
-       { path: "explore", element: <ExplorePage /> },
+
       { path: "fav", element: <FavouritesPage /> },
       { path: "booking-details/:bookingId", element: <BookingDetails /> },
       { path: "profile", element: <Profile /> },

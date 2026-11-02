@@ -49,13 +49,26 @@ export interface RegisterPayload{
     email:string,
     confirmPassword:string,
     password:string,
-    phoneNumber:number,
+    phoneNumber:string,
     country:string,
      role:"admin" | "user",
      profileImage:string,
 
 }
 export interface RegisterResponse{
+    success:boolean,
+    message:string,
+    data: null
+
+}
+export interface ChangePassPayload{
+oldPassword:string;
+newPassword:string;
+confirmPassword:string;
+
+
+}
+export interface ChangePassResponse{
     success:boolean,
     message:string,
     data: null

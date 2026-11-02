@@ -57,7 +57,7 @@ formData.append("role", data.role);
       helperText={errors?.userName?.message}
   />
   <Box sx={{display:"flex"}}>
-            <TextField label ="phoneNumber" fullWidth type="number" margin="normal"
+            <TextField label ="phoneNumber" fullWidth type="tel" margin="normal"
             sx={{mr:3}}
     {...register("phoneNumber",{
         required:"phoneNumber required",

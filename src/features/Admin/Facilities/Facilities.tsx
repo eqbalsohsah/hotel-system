@@ -1,9 +1,9 @@
-import { AppBar, Box, Button, Container, LinearProgress, TablePagination, Typography, useTheme } from "@mui/material";
+import { AppBar, Box, Button, Container, LinearProgress, TablePagination, TextField, Typography, useTheme } from "@mui/material";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { IFacility } from "../../../interfaces/roomsInterface";
 import { useSearchParams } from "react-router-dom";
-import { deleteFacility, FetchFacilitesList } from "../../../services/facilitesService";
+import { addFacility, deleteFacility, FetchFacilitesList, updateFacilityApi } from "../../../services/facilitesService";
 import { toast } from "react-toastify";
 import type { IMenuActions } from "../../../common/components/ActionMenu";
 import { AddCircleOutlineOutlined, Delete, Edit, Visibility } from "@mui/icons-material";
@@ -11,18 +11,82 @@ import type { IColumn } from "../../../common/components/CustomTable";
 import CustomTable from "../../../common/components/CustomTable";
 import ActionMenu from "../../../common/components/ActionMenu";
 import DeleteConfirmationModal from "../../../common/components/DeleteConfirmationModal";
+import DataModal from "../../../common/components/DataModal";
+import { useForm } from "react-hook-form";
 
 export default function Facilities() {
    const theme=useTheme();
     const queryClient = useQueryClient();
     const [open ,setOpen]=useState(false);
-     const [selectedFacility,setSelectedFacility]=useState<IFacility|null>(null);
+     const [selectedFacility,setSelectedFacility]=useState<IFacility | null>(null);
      const [searchParams,setSearchParams]=useSearchParams();
        const page=parseInt(searchParams.get("page")|| "0");
        const rowsPerPage=parseInt(searchParams.get("size")|| "5");
+       const [modalOpen, setModalOpen] = useState(false);
+       const [mode, setMode] = useState<"view" | "update" |"add">("view");
+       const {register,handleSubmit,formState:{errors},reset}=useForm();
+       const handleClose=()=>{
+        setModalOpen(false)
+       }
+      // Add facility
+      const handelAddFacility=()=>{
+        setModalOpen(true);
+        setMode("add");
+        reset({name:""});
+      }
+       const handelViewFacility=(facility:IFacility)=>{
+        setModalOpen(true);
+        setMode("view");
+        setSelectedFacility(facility)
+
+      }
+      const updateFacility=(facility:IFacility)=>{
+        setSelectedFacility(facility);
+           setModalOpen(true);
+        setMode("update");
+        reset({name:facility.name});
+
+      }
+      const {mutate:perfomAdd,isPending}=useMutation({
+        mutationFn:(name:string)=>addFacility(name),
+        onSuccess:()=>{
+          queryClient.invalidateQueries({queryKey:["facilities"]});
+          toast.success("facility added successfully");
+        setModalOpen(false)
+        },
+        onError:(error:any)=>{
+toast.error(error.response?.data?.data?.message|| "error adding facility")
+        }
+
+      })
+      const {mutate:perfomUpdateFacility}=useMutation({
+        mutationFn: (data: { id: string; name: string })=> updateFacilityApi(data.id, data.name),
+        onSuccess:()=>{
+          queryClient.invalidateQueries({queryKey:["facilities"]});
+          toast.success("facility updated successfully");
+        setModalOpen(false)
+        },
+        onError:(error:any)=>{
+toast.error(error.response?.data?.data?.message|| "error update facility")
+        }
+
+      })
+      const onSave=(formData:any)=>{
+        if(mode==="add"){
+          perfomAdd(formData.name);
+        }
+        else if(mode==="update"&& selectedFacility){
+
+         perfomUpdateFacility({
+      id: selectedFacility._id,
+      name: formData.name,
+    });
+        }
+      }
+
       //  pagination function
       const handleChangePage = (
-  event: unknown,
+ _event: unknown,
   newPage: number
 ) => {
 
@@ -64,7 +128,7 @@ const handleChangeRowsPerPage = (
             toast.error(error.response?.data?.message || "error deleting room");
           }
         });
-          const facilitesData = data as {
+            const facilitesData = data as {
             facilities: IFacility[];
             totalCount: number;
           } |undefined;
@@ -73,14 +137,14 @@ const handleChangeRowsPerPage = (
               label:"view",
               icon:<Visibility fontSize="small"/>,
               color:theme.palette.primary.main,
-              onClick:(id)=>alert("view"),
+              onClick:()=>handelViewFacility(row),
 
             },
              {
               label:"Edit",
               icon:<Edit fontSize="small"/>,
               color:theme.palette.secondary.main,
-              onClick:(id)=>alert("Edit"),
+              onClick:()=>updateFacility(row),
 
             },
              {
@@ -139,6 +203,7 @@ const handleChangeRowsPerPage = (
           variant="contained"
           startIcon={<AddCircleOutlineOutlined/>}
           sx={{textTransform:"none",borderRadius:"8px"}}
+          onClick={handelAddFacility}
 
           >
   Add New Room
@@ -178,6 +243,40 @@ const handleChangeRowsPerPage = (
         <DeleteConfirmationModal open={open} title="Delete Modal" onClose={()=>setOpen(false) } onConfirm={handelConfirmDelete}/>
 
   </Box>
+  <DataModal
+ open={modalOpen}
+ onClose={handleClose}
+ mode={mode}
+ onSave={handleSubmit(onSave)}
+ isPending={isPending}
+ title={
+  mode === "view"
+    ? "Faciltiy Details"
+    : mode === "update"
+    ? "Update Facility"
+    : "Add New Facility"
+}
+  >
+{mode === "add" || mode === "update" ? (
+  <TextField
+    label="Facility name"
+    fullWidth
+    sx={{ mt: 3 }}
+    {...register("name", {
+      required: "facility name required",
+    })}
+    error={!!errors.name}
+ helperText={String(errors.name?.message ?? "")}
+  />
+) : (
+  <Typography sx={{mt:3}}>
+    Facility Name:{selectedFacility?.name}
+  </Typography>
+)}
+
+
+
+  </DataModal>
 
   </>;
 }

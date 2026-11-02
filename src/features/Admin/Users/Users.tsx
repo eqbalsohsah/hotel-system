@@ -30,7 +30,7 @@ export default function Users() {
 
 
 const handleChangePage = (
-  event: unknown,
+  _event: unknown,
   newPage: number
 ) => {
 

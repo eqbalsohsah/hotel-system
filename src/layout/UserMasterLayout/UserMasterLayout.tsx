@@ -1,10 +1,16 @@
 import { Outlet } from "react-router-dom";
 
+import UserNavBar from "../../features/User/UserHome/components/UserNavBar";
+
+
+
 export default function UserMasterLayout() {
   return (
-    <div>
-      UserMasterLayout
+    <>
+
+  <UserNavBar/>
       <Outlet />
-    </div>
+
+    </>
   );
 }

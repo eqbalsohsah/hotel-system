@@ -12,3 +12,13 @@ export const deleteFacility=async(id:string)=>{
     return response?.data?.data
 
 }
+export const addFacility=async(name:string)=>{
+    const response=await axiosInstance.post("/admin/room-facilities",{name});
+    return response?.data?.data
+
+}
+export const updateFacilityApi=async(id:string,name:string)=>{
+    const response=await axiosInstance.put(`/admin/room-facilities/${id}`,{name});
+    return response?.data?.data
+
+}

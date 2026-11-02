@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import deleteImg from "../../assets/images/deleteImg.png"
 
  export interface DeleteConfirmationDialogProps {
@@ -9,7 +9,7 @@ import deleteImg from "../../assets/images/deleteImg.png"
   onConfirm: () => void;
 }
 
-export default function DeleteConfirmationModal({open,title,onClose,onConfirm}:DeleteConfirmationDialogProps) {
+export default function DeleteConfirmationModal({open,title,onClose,onConfirm,loading}:DeleteConfirmationDialogProps) {
   return (
     <>
 
@@ -33,6 +33,7 @@ export default function DeleteConfirmationModal({open,title,onClose,onConfirm}:D
             color="error"
             variant="contained"
             onClick={onConfirm}
+            disabled={loading}
           >
             Delete
           </Button>
