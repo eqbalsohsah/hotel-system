@@ -38,7 +38,7 @@ const { mutate: addRoom, isPending } = useMutation({
 
   if (!files || files.length === 0) return;
 
-  setValue("imgs", files);
+  setValue("imgs", Array.from(files));
 
   const reader = new FileReader();
   reader.onloadend = () => {
@@ -54,7 +54,7 @@ const { mutate: addRoom, isPending } = useMutation({
 console.log(facilitiesData);
 
 
-  const onSubmit=(data:IRoom)=>{
+  const onSubmit=(data:IAddRoomForm)=>{
     const formData=new FormData();
     formData.append("roomNumber",data.roomNumber);
      formData.append("price",String(data.price));
@@ -67,8 +67,8 @@ if (data.facilities?.length) {
   });
 }
 
-          if (data.imgs?.length) {
-  Array.from(data.imgs).forEach((file) => {
+if (data.imgs?.length) {
+  data.imgs.forEach((file) => {
     formData.append("imgs", file);
   });
 }

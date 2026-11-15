@@ -60,7 +60,11 @@ export default function NavBar() {
       >
         <Toolbar sx={{ p: { xs: 1, sm: 0 } }}>
           <Link to="/home" style={{ textDecoration: "none" }}>
-            <Typography fontSize={"26px"} variant="h5" component="p" sx={{ fontWeight: 700, m: 0 }}>
+          <Typography
+  variant="h5"
+  component="p"
+  sx={{ fontSize: "26px", fontWeight: 700, m: 0 }}
+>
               <span style={{ color: "#152C5B" }}>Stay</span>
               <span style={{ color: "#3252DF" }}>cation.</span>
             </Typography>
@@ -78,13 +82,15 @@ export default function NavBar() {
         >
           {BaseNavBar.map((title) => (
             <Link key={title} style={{ textDecoration: "none" }} to={`/${title}`}>
-              <Typography
-                color={title === "home" ? "rgba(50, 82, 223, 1)" : "black"}
-
-                fontWeight={"500"}
-                sx={{ cursor: "pointer", textTransform:"capitalize" }}
-                fontSize={"16px"}
-              >
+            <Typography
+  color={title === "Home" ? "rgba(50, 82, 223, 1)" : "black"}
+  sx={{
+    cursor: "pointer",
+    textTransform: "capitalize",
+    fontWeight: 500,
+    fontSize: "16px",
+  }}
+>
                 {title}
               </Typography>
             </Link>
@@ -95,12 +101,14 @@ export default function NavBar() {
               {/* //logged user */}
               {LoginUser.map((title) => (
                 <Link key={title.name} style={{ textDecoration: "none" }} to={`/${title.Routing}`}>
-                  <Typography
-                    fontWeight={"500"}
-                    fontSize={"16px"}
-                    sx={{ cursor: "pointer" }}
-                    color="black"
-                  >
+                <Typography
+  sx={{
+    cursor: "pointer",
+    fontWeight: 500,
+    fontSize: "16px",
+  }}
+  color="black"
+>
                     {title.name}
                   </Typography>
                 </Link>
@@ -133,9 +141,11 @@ export default function NavBar() {
                   anchorEl={anchorEl}
                   open={openMenu}
                   onClose={handleMenuClose}
-                  MenuListProps={{
-                    'aria-labelledby': 'user-nav-button',
-                  }}
+slotProps={{
+  list: {
+    "aria-labelledby": "user-nav-button",
+  },
+}}
                   anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',

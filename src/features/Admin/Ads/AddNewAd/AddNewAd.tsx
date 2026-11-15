@@ -55,13 +55,15 @@ export default function AddNewAd() {
   return<>
 <Box sx={{p:3}}>
   <Breadcrumbs separator={<NavigateNext  fontSize="small"/>} sx={{mb:3}}>
-   <Link onClick={()=>navigate("/admin/ads")} color="inherit"  underline="hover">Ads</Link>
+<Link to="/admin/ads" style={{ color: "inherit", textDecoration: "none" }}>
+  Ads
+</Link>
    <Typography>create Ad</Typography>
 
   </Breadcrumbs>
   <Card sx={{maxWidth:800,mx:"auto",boxShadow:"6",borderRadius:"12px"}}>
     <CardContent sx={{p:4}}>
-      <Typography variant="h5" sx={{ mb: 1, fontWeight: "bold" }}>
+      <Typography variant="h5" >
         Create New Advertisment
       </Typography>
       <Typography variant="body2" color="textSecondary" sx={{mb:4}}>

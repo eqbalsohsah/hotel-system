@@ -303,7 +303,7 @@ title="Delete Modal" onClose={()=>setOpen(false) } onConfirm={handelConfirmDelet
 
 {mode === "view" ? (
 
-<Grid container spacing={2} alignItems="center">
+<Grid container spacing={2} sx={{ alignItems: "center" }}>
 
   {/* التفاصيل */}
   <Grid size={{ xs: 12, md:  6}}>

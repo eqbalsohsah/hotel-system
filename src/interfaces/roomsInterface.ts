@@ -19,6 +19,6 @@ export interface IAddRoomForm {
   price: number;
   capacity: number;
   discount: number;
-  imgs: FileList;
+  imgs: File[];
   facilities: string[];
 }
