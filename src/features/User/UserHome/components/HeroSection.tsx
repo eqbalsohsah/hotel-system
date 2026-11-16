@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { AxiosError } from "axios";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import BookingCalendar from "../../Ui/sharedd/BookingCalender";
 
 interface BookingData {
@@ -99,16 +99,12 @@ export default function HeroSection() {
               Time to make another memorable moment.
             </Typography>
 
-            <BookingCalendar
-              buttonText={
-                searchRoomsMutation.isPending ? (
-                  <CircularProgress size={20} color="inherit" />
-                ) : (
-                  "Explore"
-                )
-              }
-              onSubmit={handleBookingSubmit}
-            />
+          <BookingCalendar
+  buttonText={
+    searchRoomsMutation.isPending ? "Loading..." : "Explore"
+  }
+  onSubmit={handleBookingSubmit}
+/>
           </Grid>
 
          {/* right side */}

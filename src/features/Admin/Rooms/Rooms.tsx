@@ -14,6 +14,13 @@ import DataModal from "../../../common/components/DataModal";
 import { Controller, useForm } from "react-hook-form";
 
 import { FetchFacilitesList } from "../../../services/facilitesService";
+interface IRoomForm {
+  roomNumber: string;
+  price: number;
+  capacity: number;
+  discount: number;
+  facilities: string[];
+}
 
 
 export default function Rooms() {
@@ -22,7 +29,7 @@ export default function Rooms() {
     const queryClient = useQueryClient();
     const [open ,setOpen]=useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const{register,handleSubmit,formState:{errors},reset,control}=useForm<IRoom>();
+const { register, handleSubmit, formState: { errors }, reset, control } = useForm<IRoomForm>();
 
 const [mode, setMode] = useState<"view" | "update">("view");
     const [selectedRoom,setSelectedRoom]=useState<IRoom|null>(null);
@@ -114,7 +121,7 @@ const handleChangeRowsPerPage = (
   });
 
 };
-const onSubmit = (data: IRoom) => {
+const onSubmit = (data: IRoomForm) => {
   if (!selectedRoom) return;
 
   const formData = new FormData();
@@ -125,9 +132,9 @@ const onSubmit = (data: IRoom) => {
   formData.append("discount", String(data.discount));
 
   if (data.facilities?.length) {
-    data.facilities.forEach((id: string) => {
-      formData.append("facilities", id);
-    });
+   data.facilities.forEach((facility) => {
+formData.append("facilities", facility);
+});
   }
 
   performUpdate({
@@ -186,7 +193,11 @@ const handelConfirmDelete=()=>{
         {id:"images",label:"Image",render:(row:IRoom)=>(
           <Box
           component="img"
-          src={row.imgs?.[0] || 'placeholder-images-url'}
+         src={
+  typeof row.imgs?.[0] === "string"
+    ? row.imgs[0]
+    : undefined
+}
           alt="Room"
           sx={{width:80,height:50,borderRadius:"8px",objectFit:"cover"}}
           >
@@ -348,7 +359,11 @@ title="Delete Modal" onClose={()=>setOpen(false) } onConfirm={handelConfirmDelet
 
     <Box
       component="img"
-      src={selectedRoom?.imgs?.[0]}
+      src={
+  typeof selectedRoom?.imgs?.[0] === "string"
+    ? selectedRoom.imgs[0]
+    : undefined
+}
       alt="room"
       sx={{
         display:"flex",

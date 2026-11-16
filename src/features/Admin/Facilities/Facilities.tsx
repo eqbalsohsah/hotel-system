@@ -1,7 +1,7 @@
 import { AppBar, Box, Button, Container, LinearProgress, TablePagination, TextField, Typography, useTheme } from "@mui/material";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import type { IFacility } from "../../../interfaces/roomsInterface";
+import type { IFacility } from "../../../interfaces/facilitiesInterface";
 import { useSearchParams } from "react-router-dom";
 import { addFacility, deleteFacility, FetchFacilitesList, updateFacilityApi } from "../../../services/facilitesService";
 import { toast } from "react-toastify";
@@ -131,7 +131,7 @@ const handleChangeRowsPerPage = (
             const facilitesData = data as {
             facilities: IFacility[];
             totalCount: number;
-          } |undefined;
+          }  | undefined;
           const getAction=(row:IFacility):IMenuActions[]=>[
             {
               label:"view",
